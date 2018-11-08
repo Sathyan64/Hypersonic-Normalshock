@@ -1,12 +1,16 @@
-P1 = 5.405E4;%Pa
-T1 = -17.47+273;%K
-M1 = 6.0;
+clear;
+prompt = 'Incoming Mach number : ';
+M1 = input(prompt);
+prompt2 = 'Altitude in feet : ';
+H_f = input(prompt2);
+H = H_f*0.3048;
+[P1,T1,rho1] = Alt_profile(H);
 gamma1 = 1.4;
 R = 287;
 Cp1 = (gamma1*R)/(gamma1-1);
 h1 = Cp1*T1;
 u1 = M1*sqrt(1.4*287*T1);
-rho1 = (P1/(287*T1));%kg/m^3
+
 rho_ratio_old = 0.1;
 rho_ratio_diff = rho_ratio_old;
 iter = 1;
@@ -19,7 +23,7 @@ while rho_ratio_diff > tol
  X = log(P2/1.013E5);
  Y = log(rho2/1.225);
  Z = X-Y;
- gamma = coefficients(X,Y,Z);
+ gamma = coefficients_P(X,Y,Z);
  rho_ratio_new = rho1/((P2/h2)*(gamma/(gamma-1)));
  rho_ratio_diff = abs(rho_ratio_old - rho_ratio_new);  
  rho_ratio_old = rho_ratio_new;
@@ -28,3 +32,7 @@ while rho_ratio_diff > tol
 end 
 fclose(fileID);
 rho2_rho1 = rho2/rho1;
+gamma_2 = coefficients_T(X,Y,Z);
+T_0_ref = 288.16;
+T2 = T_0_ref*exp(gamma_2);
+
