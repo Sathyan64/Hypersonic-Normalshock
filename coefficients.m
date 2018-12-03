@@ -1,4 +1,4 @@
-function [gamma] = coefficients(X,Y,Z)
+function [gamma] = coefficients_T(X,Y,Z)
 if Y > -0.50
     if Z <= 0.30
       c1=1.40000;
